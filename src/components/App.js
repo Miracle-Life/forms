@@ -11,7 +11,8 @@ export default class App extends React.Component {
             repeatPassword: "",
             country: '1',
             gender: "male",
-            agree: true
+            agree: true,
+            avatar: ''
         };
     }
 
@@ -25,7 +26,16 @@ export default class App extends React.Component {
             [event.target.name]: event.target.checked
         })
     }
-
+    onChangeAvatars = (event) => {
+        const reader = new FileReader();
+        reader.onload = event => {
+            this.setState({
+                avatar: event.target.result
+            })
+        };
+        reader.readAsDataURL(event.target.files[0]);
+        console.log(this.state.avatar)
+    }
     onSubmit = event => {
         event.preventDefault();
         // console.log("refs", this.username.value, this.password.value);
@@ -124,6 +134,18 @@ export default class App extends React.Component {
                                 Female
                             </label>
                         </div>
+                        <div className="form-group">
+                            <div className="mb-3">
+                                <label htmlFor="avatar" className="form-label">Avatar</label>
+                                <input
+                                    className="form-control"
+                                    type="file"
+                                    id="avatar"
+                                    name="avatar"
+                                    onChange={this.onChangeAvatars}
+                                />
+                            </div>
+                        </div>
                         <div className="form-check">
                             <input
                                 className="form-check-input"
@@ -135,7 +157,7 @@ export default class App extends React.Component {
                                 defaultChecked={this.state.agree}
                             />
                             <label className="form-check-label" htmlFor="agree">
-                                Agree
+                                Confirm the processing of data
                             </label>
                         </div>
                     </fieldset>
