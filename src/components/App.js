@@ -17,7 +17,8 @@ export default class App extends React.Component {
                 username: false,
                 password: false,
                 repeatPassword: false
-            }
+            },
+            age: 13
         };
     }
 
@@ -76,6 +77,44 @@ export default class App extends React.Component {
             </option>
         ))
     }
+    incrementAge = () => {
+        this.setState(
+            (prevState, prevProps) => ({
+                age: prevState.age + 1
+            }),
+            () => {
+                console.log("callback", this.state.age);
+                this.setState({
+                    errors: {
+                        age: this.state.age > 18 ? false : "Must be more 18"
+                    }
+                });
+            }
+        );
+        // this.setState((prevState, prevProps) => ({
+        //   age: prevState.age + 1
+        // }));
+        // console.log("incrementAge", this.state.age);
+        // this.setState((prevState, prevProps) => ({
+        //   age: prevState.age + 1
+        // }));
+    };
+
+    decrementAge = () => {
+        this.setState(
+            {
+                age: this.state.age - 1
+            },
+            () => {
+                console.log("callback", this.state.age);
+                this.setState({
+                    errors: {
+                        age: this.state.age > 18 ? false : "Must be more 18"
+                    }
+                });
+            }
+        );
+    };
 
     render() {
         // console.log(this);
@@ -99,7 +138,7 @@ export default class App extends React.Component {
                     <div className="form-group">
                         <label>Password</label>
                         <input
-                            type="password"
+                            type="text"
                             className="form-control"
                             placeholder="Enter password"
                             ref={node => (this.password = node)}
@@ -113,7 +152,7 @@ export default class App extends React.Component {
                     <div className="form-group">
                         <label>Repeat password</label>
                         <input
-                            type="password"
+                            type="text"
                             className="form-control"
                             placeholder="Enter repeat password"
                             ref={node => (this.repeatPassword = node)}
@@ -122,7 +161,7 @@ export default class App extends React.Component {
                             onChange={this.onChange}
                         />
                         {this.state.errors ?
-                            <div className='invalid-feedback'>{this.state.errors.repeatPassword}</div> : null}
+                            <div className='invalid-feedback '>{this.state.errors.repeatPassword}</div> : null}
                     </div>
                     <div className='form-group'>
                         <label htmlFor="country">Country</label>
@@ -177,6 +216,39 @@ export default class App extends React.Component {
                                 />
                             </div>
                         </div>
+                        <div className="form-group">
+                            <div>
+                                <label>Age</label>
+                            </div>
+                            <div className="btn-group" role="group">
+                                <button
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    onClick={this.decrementAge}
+                                >
+                                    -
+                                </button>
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Enter age"
+                                    name="age"
+                                    value={this.state.age}
+                                    onChange={this.onChange}
+                                />
+                                <button
+                                    className="btn btn-secondary"
+                                    type="button"
+                                    onClick={this.incrementAge}
+                                >
+                                    +
+                                </button>
+                            </div>
+                            {this.state.errors.age ? (
+                                <div className="invalid-feedback">{this.state.errors.age}</div>
+                            ) : null}
+                        </div>
+
                         <div className="form-check">
                             <input
                                 className="form-check-input"
