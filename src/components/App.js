@@ -1,5 +1,6 @@
 import React from "react";
 import countries from "../data/countries"
+import {Field} from "./Field";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -18,7 +19,7 @@ export default class App extends React.Component {
                 password: false,
                 repeatPassword: false
             },
-            age: 13
+            age: 17
         };
     }
 
@@ -83,21 +84,23 @@ export default class App extends React.Component {
                 age: prevState.age + 1
             }),
             () => {
+                if (this.state.age < 18) {
+                    this.setState({
+                        errors: {
+                            age: "Must be more 18"
+                        }
+                    });
+                }
+                else {
+                    this.setState({
+                        errors: {
+                            age: false
+                        }
+                    });
+                }
                 console.log("callback", this.state.age);
-                this.setState({
-                    errors: {
-                        age: this.state.age > 18 ? false : "Must be more 18"
-                    }
-                });
             }
         );
-        // this.setState((prevState, prevProps) => ({
-        //   age: prevState.age + 1
-        // }));
-        // console.log("incrementAge", this.state.age);
-        // this.setState((prevState, prevProps) => ({
-        //   age: prevState.age + 1
-        // }));
     };
 
     decrementAge = () => {
@@ -105,14 +108,6 @@ export default class App extends React.Component {
             {
                 age: this.state.age - 1
             },
-            () => {
-                console.log("callback", this.state.age);
-                this.setState({
-                    errors: {
-                        age: this.state.age > 18 ? false : "Must be more 18"
-                    }
-                });
-            }
         );
     };
 
@@ -121,48 +116,36 @@ export default class App extends React.Component {
         return (
             <div className="form-container card">
                 <form className="form card-body">
-                    <div className="form-group">
-                        <label>Username</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Enter username"
-                            ref={node => (this.username = node)}
-                            name="username"
-                            value={this.state.username}
-                            onChange={this.onChange}
-                        />
-                        {this.state.errors ?
-                            <div className='invalid-feedback'>{this.state.errors.username}</div> : null}
-                    </div>
-                    <div className="form-group">
-                        <label>Password</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Enter password"
-                            ref={node => (this.password = node)}
-                            name="password"
-                            value={this.state.password}
-                            onChange={this.onChange}
-                        />
-                        {this.state.errors ?
-                            <div className='invalid-feedback'>{this.state.errors.password}</div> : null}
-                    </div>
-                    <div className="form-group">
-                        <label>Repeat password</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Enter repeat password"
-                            ref={node => (this.repeatPassword = node)}
-                            name="repeatPassword"
-                            value={this.state.repeatPassword}
-                            onChange={this.onChange}
-                        />
-                        {this.state.errors ?
-                            <div className='invalid-feedback '>{this.state.errors.repeatPassword}</div> : null}
-                    </div>
+                    <Field
+                        id="username"
+                        labelText="Username"
+                        type="text"
+                        placeholder="Enter username"
+                        name="username"
+                        value={this.state.username}
+                        onChange={this.onChange}
+                        error={this.state.errors.username}
+                    />
+                    <Field
+                        id="password"
+                        labelText="Password"
+                        type="password"
+                        placeholder="Enter password"
+                        name="password"
+                        value={this.state.password}
+                        onChange={this.onChange}
+                        error={this.state.errors.password}
+                    />
+                    <Field
+                        id="repeatPassword"
+                        labelText="Repeat password"
+                        type="password"
+                        placeholder="Enter repeat password"
+                        name="repeatPassword"
+                        value={this.state.repeatPassword}
+                        onChange={this.onChange}
+                        error={this.state.errors.repeatPassword}
+                    />
                     <div className='form-group'>
                         <label htmlFor="country">Country</label>
                         <select
